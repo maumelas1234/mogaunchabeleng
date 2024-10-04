@@ -161,3 +161,61 @@ function editSkill(skillElement) {
 }
 
   
+
+    // Select DOM elements
+    const educationList = document.getElementById('education-list');
+    const educationNameInput = document.getElementById('education-name');
+    const educationPlatformInput = document.getElementById('education-platform');
+    const educationDurationInput = document.getElementById('education-duration');
+    const addEducationButton = document.getElementById('add-education');
+
+    // Function to create an education entry
+    function createEducationEntry(name, platform, duration) {
+        const educationData = document.createElement('div');
+        educationData.className = 'education-data';
+
+        educationData.innerHTML = `
+            <div class="education-names">
+                <span class="education-name">${name}</span>
+                <p class="education-platform">${platform}</p>
+                <p class="education-duration">${duration}</p>
+                <button class="edit-button">Edit</button>
+                <button class="delete-button">Delete</button>
+            </div>
+        `;
+
+        // Add event listener for the delete button
+        educationData.querySelector('.delete-button').addEventListener('click', () => {
+            educationList.removeChild(educationData); // Remove the entry
+        });
+
+        // Add event listener for the edit button
+        educationData.querySelector('.edit-button').addEventListener('click', () => {
+            // Fill inputs with current values for editing
+            educationNameInput.value = name;
+            educationPlatformInput.value = platform;
+            educationDurationInput.value = duration;
+
+            // Remove the entry on edit to avoid duplicates
+            educationList.removeChild(educationData);
+        });
+
+        educationList.appendChild(educationData); // Append the new entry
+    }
+
+    // Add event listener to add education button
+    addEducationButton.addEventListener('click', () => {
+        const name = educationNameInput.value.trim();
+        const platform = educationPlatformInput.value.trim();
+        const duration = educationDurationInput.value.trim();
+
+        // Validate inputs
+        if (name && platform && duration) {
+            createEducationEntry(name, platform, duration); // Create new entry
+            educationNameInput.value = ''; // Clear inputs
+            educationPlatformInput.value = '';
+            educationDurationInput.value = '';
+        } else {
+            alert('Please fill in all fields'); // Alert if fields are empty
+        }
+    });
